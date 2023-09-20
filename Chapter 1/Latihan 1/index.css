@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* .container p {
+  display: flex;
+  text-align: center;
+} */
+.container h1 {
+  border-radius: 2px;
+  background: purple;
+}
+.container img {
+  display: flex;
+  width: 300px;
+  height: 500px;
+  justify-content: center;
+  align-items: center;
+}
