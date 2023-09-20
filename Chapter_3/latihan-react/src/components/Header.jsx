@@ -19,6 +19,9 @@ const Header = () => {
             <Nav.Link as={Link} to="/module-style">
               Module Style
             </Nav.Link>
+            <Nav.Link as={Link} to="/student">
+              Students
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
