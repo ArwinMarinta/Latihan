@@ -6,33 +6,45 @@ import MovieItem from "../components/MovieItem";
 
 const Home = () => {
   const [popularMovies, setPopularMovies] = useState([]);
+  const [errors, setErrors] = useState({
+    isError: false,
+    message: null,
+  });
 
   useEffect(() => {
     const getPopularMovie = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${
-            import.meta.env.VITE_API_URL
-          }/3/movie/popular?language=en-US&page=1`,
+          `${import.meta.env.VITE_API_URL}/api/v1/movie/popular`,
           {
             headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_API_AUTH_TOKEN}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
-        const { data } = response;
-        setPopularMovies(data?.results);
+        const { data } = response.data;
+        setPopularMovies(data);
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          alert(error?.response?.data?.status_message);
+          setErrors({
+            ...errors,
+            isError: true,
+            message: error?.response?.data?.message || error?.message,
+          });
           return;
         }
 
         alert(error?.message);
+        setErrors({
+          ...errors,
+          isError: true,
+          message: error?.message,
+        });
       }
     };
     getPopularMovie();
-  }, []);
+  }, [errors]);
 
   if (popularMovies.length === 0) {
     return <h1>Loading....</h1>;

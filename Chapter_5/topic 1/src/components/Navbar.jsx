@@ -1,7 +1,47 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const navbarComponents = () => {
+const NavbarComponents = () => {
+  const [user, setUser] = useState(null);
+
+  const logout = (event) => {
+    event.preventDefault();
+
+    localStorage.removeItem("token");
+
+    window.location.replace("/");
+  };
+
+  useEffect(() => {
+    const getMe = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/auth/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const { data } = response.data;
+        setUser(data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          alert(error?.response?.data?.message);
+          return;
+        }
+        alert(error?.message);
+      }
+    };
+    getMe();
+  }, []);
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary w-full">
       <Container>
@@ -16,13 +56,21 @@ const navbarComponents = () => {
               Search
             </Nav.Link>
           </Nav>
-        </Navbar.Collapse>
-        <Navbar.Toggle aria-controls="right-navbar" />
-        <Navbar.Collapse id="right-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/login">
-              Login
-            </Nav.Link>
+            {user ? (
+              <>
+                <Nav.Link as={Link} to="/myprofile">
+                  {user?.name}
+                </Nav.Link>
+                <Nav.Link as={Link} onClick={logout}>
+                  logout
+                </Nav.Link>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/login">
+                Login
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -30,4 +78,4 @@ const navbarComponents = () => {
   );
 };
 
-export default navbarComponents;
+export default NavbarComponents;

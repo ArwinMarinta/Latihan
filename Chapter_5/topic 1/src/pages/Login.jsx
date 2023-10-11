@@ -1,39 +1,49 @@
 // import React from "react";
 import { Container, Card, Button, Form } from "react-bootstrap";
 import { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  // const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = async(event)=>{
+  const login = async (event) => {
     event.preventDefault();
 
-    try{
-        const response = awai axios.post('https://shy-cloud-3319.fly.dev/api/v1/auth/login',
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/auth/login`,
         {
-            email,
-            password,
+          email,
+          password,
         }
-        )
+      );
 
-        const {data}= response.data;
-        const{token}= data;
-    }catch(error){
-        if(axios.isAxiosError(error)){
-            alert(error?.response?.data?.message)
-        }
+      const { data } = response.data;
+      const { token } = data;
+
+      //menyimpan token ke localStorage
+      localStorage.setItem("token", token);
+
+      //direct ke home ketika login berhasil
+      // navigate("/");
+
+      window.location.replace("/");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        alert(error?.response?.data?.message);
+      }
     }
-
-  }
+  };
 
   return (
     <Container className="p-4">
       <Card>
         <Card.Header>Featured</Card.Header>
         <Card.Body>
-          <Form>
+          <Form onSubmit={login}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label> Email Addres</Form.Label>
               <Form.Control
