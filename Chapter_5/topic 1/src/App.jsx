@@ -4,18 +4,51 @@ import SearchMovie from "./pages/SearchMovie";
 import DetailMovie from "./pages/DetailMovie";
 import NavbarComponents from "./components/Navbar";
 import Login from "./pages/Login";
+import Protected from "./components/Protected";
+import NoAccesToken from "./components/NoAccesToken";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
-    <BrowserRouter>
-      <NavbarComponents />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search-movie" element={<SearchMovie />} />
-        <Route path="/detail/:movieId" element={<DetailMovie />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID}>
+      <BrowserRouter>
+        <NavbarComponents />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Protected>
+                <Home />
+              </Protected>
+            }
+          />
+          <Route
+            path="/search-movie"
+            element={
+              <Protected>
+                <SearchMovie />
+              </Protected>
+            }
+          />
+          <Route
+            path="/detail/:movieId"
+            element={
+              <Protected>
+                <DetailMovie />
+              </Protected>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <NoAccesToken>
+                <Login />
+              </NoAccesToken>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 }
 

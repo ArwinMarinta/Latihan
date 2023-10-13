@@ -2,6 +2,7 @@
 import { Container, Card, Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import GoogleLogin from "../components/GoogleLogin";
 // import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -66,6 +67,9 @@ const Login = () => {
               SUBMIT
             </Button>
           </Form>
+          <div>
+            <GoogleLogin buttonText={"Login with Google"} />
+          </div>
         </Card.Body>
       </Card>
     </Container>

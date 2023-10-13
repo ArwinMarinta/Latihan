@@ -11,7 +11,7 @@ const NavbarComponents = () => {
 
     localStorage.removeItem("token");
 
-    window.location.replace("/");
+    window.location.replace("/login");
   };
 
   useEffect(() => {
@@ -49,12 +49,16 @@ const NavbarComponents = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/">
-              Home
-            </Nav.Link>
-            <Nav.Link as={Link} to="/search-movie">
-              Search
-            </Nav.Link>
+            {user && (
+              <>
+                <Nav.Link as={Link} to="/">
+                  Home
+                </Nav.Link>
+                <Nav.Link as={Link} to="/search-movie">
+                  Search
+                </Nav.Link>
+              </>
+            )}
           </Nav>
           <Nav className="ms-auto">
             {user ? (
